@@ -5,7 +5,7 @@
             <h3>Directory</h3>
             <p class='text-muted'>Select A company</p>
             <ul class="list-group">
-            <button type="button" class="btn btn-primary btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Bell">Bell</button>
+            <button type="button" class="btn btn-primary btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Bell Customer Service">Bell</button>
             <button type="button" class="btn btn-success btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Telus">Telus</button>
             <button type="button" class="btn btn-danger btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Rogers">Rogers</button>
             <button type="button" class="btn btn-warning btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Fido">Fido</button>
@@ -23,7 +23,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="">
+                <form method="POST" id="form1" action="(url_for('main.modal'))">
                 <div class="form-group">
                     {{ form.title.label(class="form-control-label") }}
                     {% if form.title.errors %}
@@ -36,13 +36,9 @@
                     {% else %}
                         {{ form.title(class="form-control form-control-lg") }}
                     {% endif %}
-                    <label for="recipient-name" class="col-form-label">Recipient:</label>
-                    <input type="text" class="form-control" id="recipient-name">
                 </div>
                 <div class="form-group">
                     {{ form.content.label(class="form-control-label") }}
-                    <label for="message-text" class="col-form-label">Message:</label>
-                    <textarea class="form-control" id="message-text"></textarea>
                     {% if form.content.errors %}
                         {{ form.content(class="form-control form-control-lg is-invalid") }}
                         <div class="invalid-feedback">
@@ -66,20 +62,25 @@
 
     <script>
         $('#teleModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var recipient = button.data('whatever') // Extract info from data-* attributes
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this)
-        modal.find('.modal-title').text('New message to ' + recipient)
-        modal.find('.modal-body input').val(recipient)
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-title').text('New message to ' + recipient)
+            modal.find('.modal-body input').val(recipient)
         })
         $('#btnSave').click(function() {
-            $(this.form).submit();
-
+            //event.preventDefault();
             $('#teleModal').modal('hide');
-            $('body').removeClass('modal-open');
-            $('.modal-backdrop').remove();
-        });
+            /*if (data.status == 'ok') {
+                $('#teleModal').modal('hide');
+                location.reload();
+            }
+            else {
+                $('#teleModal').modal('hide');
+                $('#teleModal.modal-content').html(data);
+            }*/
+        })
     </script>
 {% endblock content %}

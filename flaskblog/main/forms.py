@@ -4,6 +4,6 @@ from wtforms.validators import DataRequired
 
 
 class ModalForm(FlaskForm):
-    title = StringField('Recipient', validators=[DataRequired()])
-    content = TextAreaField('Message', validators=[DataRequired()])
+    title = StringField('Recipient:', validators=[DataRequired()])
+    content = TextAreaField('Message:', validators=[DataRequired()])
     submit = SubmitField('Submit')
