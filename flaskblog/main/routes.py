@@ -1,5 +1,8 @@
-from flask import render_template, request, Blueprint
+from flask import render_template, url_for, flash, redirect, request, abort, Blueprint
+from flask_login import current_user, login_required
+from flaskblog import db
 from flaskblog.models import Post
+from flaskblog.main.forms import ModalForm
 
 main = Blueprint('main', __name__)
 
@@ -14,7 +17,30 @@ def home():
 @main.route('/about', methods=['GET', 'POST'])
 def about():
     return render_template('about.html', title = 'ABoooT')
-    
+
+@main.route('/modal', methods=['GET', 'POST'])
+@login_required
+def modal():
+    form = ModalForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, content=form.content.data, author= current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Post has been created', 'success') 
+        return redirect(url_for('main.modal'), jsonify(status='ok'))
+    return render_template('modal.html', title = 'modal', form=form, legend='Create Post')
+
+# @main.route('/modal', methods=['GET', 'POST'])
+# @login_required
+# def modal():
+#     form = PostForm()
+#     if form.validate_on_submit():
+#         post = Post(title=form.title.data, content=form.content.data, author= current_user)
+#         db.session.add(post)
+#         db.session.commit()
+#         flash('Post has been created', 'success')
+#         return redirect(url_for('main.home'))
+#     return render_template('modal.html', title='ModalPost', form=form, legend='Create Post')
 
 
 
