@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, abort, Blueprint
+from flask import render_template, url_for, flash, redirect, request, abort, Blueprint, jsonify
 from flask_login import current_user, login_required
 from flaskblog import db
 from flaskblog.models import Post
@@ -21,13 +21,16 @@ def about():
 @main.route('/modal', methods=['GET', 'POST'])
 @login_required
 def modal():
+    print("Im working outside", flush=True)
     form = ModalForm()
+    print(form.content(), flush=True)
     if form.validate_on_submit():
+        print("Im working", flush=True)
         post = Post(title=form.title.data, content=form.content.data, author= current_user)
         db.session.add(post)
         db.session.commit()
         flash('Post has been created', 'success') 
-        return redirect(url_for('main.modal'), jsonify(status='ok'))
+        return redirect(url_for('main.modal'))
     return render_template('modal.html', title = 'modal', form=form, legend='Create Post')
 
 # @main.route('/modal', methods=['GET', 'POST'])
