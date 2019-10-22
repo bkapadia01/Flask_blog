@@ -6,9 +6,9 @@
             <p class='text-muted'>Select A company</p>
             <ul class="list-group">
             <button type="button" class="btn btn-primary btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Bell Customer Service">Bell</button>
-            <button type="button" class="btn btn-success btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Telus">Telus</button>
-            <button type="button" class="btn btn-danger btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Rogers">Rogers</button>
-            <button type="button" class="btn btn-warning btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Fido">Fido</button>
+            <button type="button" class="btn btn-success btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Telus Customer Service">Telus</button>
+            <button type="button" class="btn btn-danger btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Rogers Customer Service">Rogers</button>
+            <button type="button" class="btn btn-warning btn-block" class=" list-group-item list-group-item-light" data-toggle="modal" data-target="#teleModal" data-whatever="Fido Customer Service">Fido</button>
             </ul>
         </div>
     </div>
@@ -16,71 +16,76 @@
     <div class="modal fade" id="teleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" id="form1" action="(url_for('main.modal'))">
-                <div class="form-group">
-                    {{ form.title.label(class="form-control-label") }}
-                    {% if form.title.errors %}
-                        {{ form.title(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.title.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.title(class="form-control form-control-lg") }}
-                    {% endif %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group">
-                    {{ form.content.label(class="form-control-label") }}
-                    {% if form.content.errors %}
-                        {{ form.content(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.content.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.content(class="form-control form-control-lg") }}
-                    {% endif %}
+                <div class="modal-body">
+                    <form method="POST" id="form1" action="">
+                        {{ form.hidden_tag() }}
+                        <fieldset class="form-group">
+                            <div class="form-group title">
+                                {{ form.title.label(class="form-control-label") }}
+                                {% if form.title.errors %}
+                                {{ form.title(class="form-control form-control-lg is-invalid") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.title.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.title(class="form-control form-control-lg title") }}
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.content.label(class="form-control-label") }}
+                                {% if form.content.errors %}
+                                {{ form.content(class="form-control form-control-lg is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.content.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                    {{ form.content(class="form-control form-control-lg") }}
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                {{ form.submit(class="btn btn-outline-info") }}
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                {{ form.submit(class="btn btn-outline-info", id='btnSave') }}
-            </div>
             </div>
         </div>
     </div>
 
     <script>
-        $('#teleModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('whatever') // Extract info from data-* attributes
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            var modal = $(this)
-            modal.find('.modal-title').text('New message to ' + recipient)
-            modal.find('.modal-body input').val(recipient)
-        })
-        $('#btnSave').click(function() {
-            //event.preventDefault();
-            $('#teleModal').modal('hide');
-            /*if (data.status == 'ok') {
+
+        $('#btnSave').click(function(event) {
+            event.preventDefault();
+            $.post(url, data=$('#form1').serialize(), function(data) {
+            if (data.status == 'ok') {
                 $('#teleModal').modal('hide');
                 location.reload();
             }
             else {
-                $('#teleModal').modal('hide');
-                $('#teleModal.modal-content').html(data);
-            }*/
+                $('#teleModal .modal-content').html(data);
+            }
+            });
+        })
+        $('#teleModal').on('show.bs.modal', function (event) {
+
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var recipient = button.data('whatever'); // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this);
+            modal.find('.modal-title').text('New message to ' + recipient);
+            modal.find('.title').val(recipient);
         })
     </script>
 {% endblock content %}

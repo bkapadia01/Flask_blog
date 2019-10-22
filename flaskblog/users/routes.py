@@ -68,7 +68,7 @@ def user_post(username):
     page = request.args.get('page', 1, type=int)
     posts = Post.query.filter_by(author=user)\
         .order_by(Post.date_posted.desc())\
-        .paginate(page=page, per_page=2)
+        .paginate(page=page, per_page=6)
     return render_template('user_post.html', posts=posts, user=user)
 
 
