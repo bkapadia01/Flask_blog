@@ -11,7 +11,7 @@ main = Blueprint('main', __name__)
 @main.route('/home')
 def home():
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=2)
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=6)
     return render_template('home.html', posts=posts)
     
 @main.route('/about', methods=['GET', 'POST'])
@@ -22,13 +22,15 @@ def about():
 @login_required
 def modal():
     form = ModalForm()
+    print("Pre-Validation")
     if form.validate_on_submit():
+        print(form.errors)
+        print("Validating")
         post = Post(title=form.title.data, content=form.content.data, author= current_user)
         db.session.add(post)
         db.session.commit()
-        flash('Post has been created', 'success') 
-        return redirect(url_for('main.modal'), jsonify(status='ok'))
-    return render_template('modal.html', title = 'modal', form=form, legend='Create Post')
+        return redirect(url_for('main.home'))
+    return render_template('modal.html', title='modal', form=form, legend='Create Post')
 
 # @main.route('/modal', methods=['GET', 'POST'])
 # @login_required
