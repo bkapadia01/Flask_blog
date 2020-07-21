@@ -31,18 +31,3 @@ def modal():
         db.session.commit()
         return redirect(url_for('main.home'))
     return render_template('modal.html', title='modal', form=form, legend='Create Post')
-
-# @main.route('/modal', methods=['GET', 'POST'])
-# @login_required
-# def modal():
-#     form = PostForm()
-#     if form.validate_on_submit():
-#         post = Post(title=form.title.data, content=form.content.data, author= current_user)
-#         db.session.add(post)
-#         db.session.commit()
-#         flash('Post has been created', 'success')
-#         return redirect(url_for('main.home'))
-#     return render_template('modal.html', title='ModalPost', form=form, legend='Create Post')
-
-
-
